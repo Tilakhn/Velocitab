@@ -43,7 +43,16 @@ public class PlayerTabList {
     @Subscribe
     public void onPlayerQuit(@NotNull DisconnectEvent event) {
         try {
-            removePlayer(event.getPlayer());
+            Player player = event.getPlayer();
+            
+            //check if the player is connected to a server and have previous server.
+            if(player.getCurrentServer.isPresent() && player.getRemoteServer().isPresent() &&
+               player.getCurrentServer().get().equals(player.getRemoteServer().get())){
+                
+             //if the current server is same as previous server 
+                return;
+            }
+            removePlayer(player);
             refreshHeaderAndFooter();
         } catch (Exception ignored) {
             // Ignore when server shutting down
